@@ -27,7 +27,9 @@ export default () => {
     setCars([]);
     setLoading(true);
 
-    let { data: json } = await api.get(`/carros?ano=${year}`);
+    let json = await api.getCarList(year); /// chamando a função dentro da api e enviando o year;
+
+    // let { data: json } = await api.get(`/carros?ano=${year}`);   /// forma de fazer com axios simplificado;
 
     /*
     let result = await api.get(`/carros?ano=${year}`);
@@ -56,11 +58,15 @@ export default () => {
   const handleLoginSubmit = async (e) => {
     e.preventDefault();
 
+    let json = await api.login(emailField, passwordField);
+
+    /*
     /// axios
     let { data: json } = await api.post('/auth/login', {
       email: emailField,
       password: passwordField,
     });
+    */
 
     /*
     let url = `https://api.b7web.com.br/carros/api/auth/login`;
@@ -91,11 +97,16 @@ export default () => {
   const handleRegisterSubmit = async (e) => {
     e.preventDefault();
 
+    let json = await api.register(rNameField, rEmailField, rPasswordField);
+
+    /*
+    axios:
     let { data: json } = await api.post('/auth/register', {
       name: rNameField,
       email: rEmailField,
       password: rPasswordField,
     });
+    */
 
     /*
     let url = `https://api.b7web.com.br/carros/api/auth/register`;
@@ -133,6 +144,22 @@ export default () => {
   const handleAddCarSubmit = async (e) => {
     e.preventDefault();
 
+    let photo = null;
+    if (photoField.current.files.length > 0) {
+      photo = photoField.current.files[0];
+    }
+
+    let json = await api.addNewCar(
+      newCarBrand,
+      newCarName,
+      newCarYear,
+      newCarPrice,
+      photo,
+      token,
+    );
+
+    /*
+    //// axios:
     let body = new FormData();
     body.append('brand', newCarBrand);
     body.append('name', newCarName);
@@ -145,6 +172,7 @@ export default () => {
 
     api.defaults.headers.Authorization = `Bearer ${token}`;
     let { data: json } = await api.post('/carro', body);
+    */
 
     /*
     let result = await fetch('https://api.b7web.com.br/carros/api/carro', {
